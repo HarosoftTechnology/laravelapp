@@ -132,7 +132,7 @@ $("#EditTask").on("submit", function(e){
 	$.ajax({
 	  type: "POST",
 	  dataType: "json",
-	  url: baseUrl + "admincp/task/update/" + id,
+	  url: baseUrl + "/admincp/task/update/" + id,
 	  data: $(this).serialize(),
 	  beforeSend: function() {
 		$("button.spin").attr("data-send", "true");
@@ -228,7 +228,7 @@ $("#EditTaskCategory").on("submit", function(e){
 	$.ajax({
 		type: "POST",
 		dataType: "json",
-		url: baseUrl + "admincp/task/category/update/" + id,
+		url: baseUrl + "/admincp/task/category/update/" + id,
 		data: $(this).serialize(),
 		beforeSend: function() {
 			$("button.spin").attr("data-send", "true");

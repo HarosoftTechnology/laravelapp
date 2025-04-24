@@ -32,7 +32,7 @@ Route::delete('/admincp/task/delete/{task}', [TaskController::class, 'delete'])-
 
 Route::get('/admincp/task/categories', [TaskCategoryController::class, 'index'])->name('task-categories');
 Route::match(['GET', 'POST'], '/admincp/task/category/create', [TaskCategoryController::class, 'create'])->name('create-task-category');
-Route::match(['GET', 'POST'], '/admincp/task/category/update/{task}', [TaskCategoryController::class, 'update'])->name('edit-task-category');
+Route::match(['GET', 'POST'], '/admincp/task/category/update/{category}', [TaskCategoryController::class, 'update'])->name('edit-task-category');
 Route::delete('/admincp/task/category/delete/{task}', [TaskCategoryController::class, 'delete'])->name('delete-task-category');
 
 // Dashboard route is protected by the auth middleware

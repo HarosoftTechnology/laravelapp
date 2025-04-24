@@ -86,6 +86,76 @@ class TaskCategoryController extends Controller
     }
 
     /**
+     * Update the specified task.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\TaskCategory  $category
+     * @return \Symfony\Component\HttpFoundation\Response|\Illuminate\Http\RedirectResponse
+     */
+    public function update(Request $request, TaskCategory $category)
+    {
+
+        // Process POST requests (AJAX or regular form submission)
+        if ($request->isMethod('post')) {
+            // Validate the incoming request.
+            $validator = Validator::make($request->all(), [
+                'name'       => 'required|string|max:255'
+            ]);
+
+            if ($validator->fails()) {
+                if ($request->ajax()) {
+                    return response()->json([
+                        'type' => 'error',
+                        'errors' => $validator->errors(),
+                    ], 422);
+                }
+                return redirect()->back()->with([
+                    'flash-message'   => implode('<br>', $validator->errors()->all()),
+                    'flash-type'      => 'error',
+                    'flash-dismiss'   => false,
+                    'flash-position'  => 'bottom-right',
+                ]);                
+            }
+
+            // Update the task in the database.
+            $updated = $category->update([
+                'name'       => $request->input('name')
+            ]);
+
+            if ($updated) {
+                if ($request->ajax()) {
+                    return response()->json([
+                        'type'    => 'success',
+                        'message' => 'Task updated successfully!',
+                        'redirect'=> route('task-categories'),
+                    ]);
+                }
+                return redirect()->to(url_to_pager('task-categories'))->with([
+                    'flash-message'   => "Task updated successfully!",
+                    'flash-type'      => 'success',
+                    'flash-dismiss'   => true,
+                    'flash-position'  => 'bottom-right',
+                ]);
+            }
+
+            if ($request->ajax()) {
+                return response()->json([
+                    'type'    => 'error',
+                    'message' => 'Could not update task! Please contact the administrator.',
+                ]);
+            }
+            return redirect()->back()->with([
+                'flash-message'   => "Could not update task! Please contact the administrator.",
+                'flash-type'      => 'error',
+                'flash-dismiss'   => true,
+                'flash-position'  => 'bottom-right',
+            ]);
+        }
+
+        return view('backend.edit-category', compact('category'));
+    }
+
+    /**
      * Remove the specified task from storage.
      *
      * @param  \Illuminate\Http\Request  $request

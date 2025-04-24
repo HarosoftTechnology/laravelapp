@@ -14,5 +14,5 @@ class Task extends Model
     // protected $table = 'tasks';
 
     // Specify fillable attributes to allow mass-assignment.
-    protected $fillable = ['title', 'category', 'description', 'deadline']; // Not mandatory, but highly recommended for security reasons.
+    protected $fillable = ['title', 'category', 'description', 'deadline', 'user_id']; // Not mandatory, but highly recommended for security reasons.
 }

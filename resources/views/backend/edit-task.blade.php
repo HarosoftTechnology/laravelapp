@@ -6,16 +6,16 @@
 
 <main class="h-full overflow-y-auto">
     <div class="container px-6 mx-auto">
-        <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">Add Task</h2>
+        <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">Edit Task</h2>
                 
         <div class="w-full flex-1 my-8">
             <div class="mx-auto max-w-xl p-16 bg-white rounded-lg shadow-xs dark:bg-gray-800">
-                <form id="XEditTask" method="POST" action="{{ route('edit-task') }}">
+                <form id="EditTask" method="POST" action="{{ route('edit-task', $task->id) }}" data-id="{{$task->id}}">
                     @csrf
                     
                     <label class="block text-sm">
                         <span>Title</span>
-                        <input type="text" name="title" value="{{ $category->title }}" class="focus:shadow-outline-red form-input">
+                        <input type="text" name="title" value="{{ $task->title }}" class="focus:shadow-outline-red form-input">
                     </label>
 
                     <label class="block text-sm">
@@ -35,12 +35,12 @@
 
                     <label class="block text-sm">
                         <span>Description</span>
-                        <input type="text" name="description" value="{{ $category->description }}" class="focus:shadow-outline-red form-input">
+                        <input type="text" name="description" value="{{ $task->description }}" class="focus:shadow-outline-red form-input">
                     </label>
 
                     <label class="block text-sm">
                         <span>Deadline</span>
-                        <input type="date" name="deadline" value="{{ $category->deadline }}" class="focus:shadow-outline-red form-input">
+                        <input type="date" name="deadline" value="{{ $task->deadline }}" class="focus:shadow-outline-red form-input">
                     </label>
                     
                     <button class="mt-5 w-full py-3 hover:bg-indigo-700 flex items-center justify-center focus:shadow-outline focus:outline-none spin" data-send="false">

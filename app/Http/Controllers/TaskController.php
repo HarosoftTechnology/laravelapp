@@ -14,7 +14,9 @@ class TaskController extends Controller
     public function index()
     {
         // Using Eloquent to select just the 'id' and 'title' from the tasks table.
-        $tasks = Task::all()->where('user_id', 1);
+        $user_id = Auth::user()->id;
+        $tasks = Task::where('user_id', $user_id)->get();
+
         return view('backend.tasks', compact('tasks'));
     }
 
@@ -113,25 +115,46 @@ class TaskController extends Controller
         // Process POST requests (AJAX or regular form submission)
         if ($request->isMethod('post')) {
             // Validate the incoming request.
-            $data = $request->validate([
+            $validator = Validator::make($request->all(), [
                 'title'       => 'required|string|max:255',
-                'category'    => 'required|numeric', // You might change this to exists:task_categories,id
+                'category'    => 'required|numeric',
                 'description' => 'required|string|max:255',
                 'deadline'    => 'required|date',
             ]);
 
+            if ($validator->fails()) {
+                if ($request->ajax()) {
+                    return response()->json([
+                        'type' => 'error',
+                        'errors' => $validator->errors(),
+                    ], 422);
+                }
+                return redirect()->back()->with([
+                    'flash-message'   => implode('<br>', $validator->errors()->all()),
+                    'flash-type'      => 'error',
+                    'flash-dismiss'   => false,
+                    'flash-position'  => 'bottom-right',
+                ]);                
+            }
+
             // Update the task in the database.
-            $updated = $task->update($data);
+            $updated = $task->update([
+                'title'       => $request->input('title'),
+                'category'    => $request->input('category'),
+                'description' => $request->input('description'),
+                'deadline'    => $request->input('deadline')
+            ]);
+            
 
             if ($updated) {
                 if ($request->ajax()) {
                     return response()->json([
                         'type'    => 'success',
                         'message' => 'Task updated successfully!',
-                        'redirect'=> route('dashboard'),
+                        'redirect'=> route('tasks'),
                     ]);
                 }
-                return redirect()->to(url_to_pager('dashboard'))->with([
+                return redirect()->to(url_to_pager('tasks'))->with([
                     'flash-message'   => "Task updated successfully!",
                     'flash-type'      => 'success',
                     'flash-dismiss'   => true,
@@ -152,8 +175,7 @@ class TaskController extends Controller
                 'flash-position'  => 'bottom-right',
             ]);
         }
-        // For GET requests, return the edit-task view along with task data and categories.
-        //The compact second parameter is to pre-fill the form with the existing task's data.
+
         return view('backend.edit-task', compact('categories', 'task'));
     }
 
