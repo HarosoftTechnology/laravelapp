@@ -12,7 +12,7 @@ class LoginController extends Controller
     {
         // If the user is already authenticated, redirect them to the dashboard
         if (Auth::check()) {
-            return redirect()->route('dashboard');
+            return redirect()->route('admin-dashboard');
         }
 
         if ($request->isMethod('post')) {  
@@ -43,14 +43,26 @@ class LoginController extends Controller
                 // Regenerate session to prevent fixation
                 $request->session()->regenerate();
 
+                // Check if the user's resume column has a URL from a previous session timeout
+                $user = Auth::user();
+                if (!empty($user->resume)) {
+                    session_put('resume', $user->resume);
+                    $redirect = session_get('resume');
+                    // Clear the resume column so it doesn't affect subsequent logins
+                    $user->resume = "";
+                    $user->save();
+                } else {
+                    $redirect = url_to_pager('admin-dashboard');
+                }
+
                 if ($request->ajax()) {
                     return response()->json([
                         'type'   => 'success',
                         'message'  => 'Login successful!',
-                        'redirect' => route('dashboard'),
+                        'redirect' => $redirect,
                     ]);
                 }
-                return redirect()->to(url_to_pager('dashboard'))->with([
+                return redirect()->to($redirect)->with([
                     'flash-message'   => "Login successful!",
                     'flash-type'      => 'success',
                     'flash-dismiss'   => true,
@@ -69,15 +81,9 @@ class LoginController extends Controller
                 'flash-dismiss'   => false,
                 'flash-position'  => 'bottom-right',
             ]);
-            // If authentication fails, return error response
-            return response()->json([
-                'errors' => [
-                    'email' => ['Invalid username or password!'],
-                ]
-            ], 422);
         }
 
-        return view('frontend.auth.login');
+        return view('auth.login');
     }
 }
 

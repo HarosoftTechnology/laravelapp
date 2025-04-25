@@ -225,5 +225,36 @@ if (!function_exists('url_to_pager')) {
             return null;
         }
     }
+}
 
+function currentRoute() {
+    return Route::currentRouteName();
+}
+
+function activeMenu() {
+    $current_route = Route::currentRouteName();
+    if(request()->routeIs($current_route))
+        return true;
+    return false;
+}
+
+if (!function_exists('current_url')) {
+    function current_url()
+    {
+        return request()->url();
+    }
+}
+
+if (!function_exists('get_menus')) {
+    function get_menus(string $location)
+    {
+        return \App\Libraries\Menu::getAllMenus($location);
+    }
+}
+
+if (!function_exists('get_menu')) {
+    function get_menu(string $location, ?string $id = null)
+    {
+        return \App\Libraries\Menu::getMenu($location, $id);
+    }
 }

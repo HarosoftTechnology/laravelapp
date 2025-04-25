@@ -53,10 +53,10 @@ class SignupController extends Controller
                     return response()->json([
                         'type'   => 'success',
                         'message'  => 'Registration successful!',
-                        'redirect' => route('dashboard'),
+                        'redirect' => route('admin-dashboard'),
                     ]);
                 }
-                return redirect()->to(url_to_pager('dashboard'))->with([
+                return redirect()->to(url_to_pager('admin-dashboard'))->with([
                     'flash-message'   => "Registration successful!",
                     'flash-type'      => 'success',
                     'flash-dismiss'   => true,

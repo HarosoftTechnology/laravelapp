@@ -12,7 +12,7 @@ class TaskCategoryController extends Controller
     public function index() 
     {
         $categories = TaskCategory::all();
-        return view('backend.task-categories', compact('categories'));
+        return view('task-categories', compact('categories'));
     }
 
     /**
@@ -82,7 +82,7 @@ class TaskCategoryController extends Controller
         }
 
         // For GET requests, return the create-task view along with categories.
-        return view('backend.create-category');
+        return view('create-category');
     }
 
     /**
@@ -152,7 +152,7 @@ class TaskCategoryController extends Controller
             ]);
         }
 
-        return view('backend.edit-category', compact('category'));
+        return view('edit-category', compact('category'));
     }
 
     /**

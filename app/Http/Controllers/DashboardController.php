@@ -16,6 +16,6 @@ class DashboardController extends Controller
         $tasks = Task::select('*')->get();
 
         // Passing the retrieved tasks to the view.
-        return view('backend.dashboard', compact('tasks'));
+        return view('admin-dashboard', compact('tasks'));
     }
 }

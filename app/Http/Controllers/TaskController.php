@@ -17,7 +17,7 @@ class TaskController extends Controller
         $user_id = Auth::user()->id;
         $tasks = Task::where('user_id', $user_id)->get();
 
-        return view('backend.tasks', compact('tasks'));
+        return view('tasks', compact('tasks'));
     }
 
     /**
@@ -70,10 +70,10 @@ class TaskController extends Controller
                     return response()->json([
                         'type'    => 'success',
                         'message' => 'Task created successfully!',
-                        'redirect'=> route('dashboard'),
+                        'redirect'=> route('admin-dashboard'),
                     ]);
                 }
-                return redirect()->to(url_to_pager('dashboard'))->with([
+                return redirect()->to(url_to_pager('admin-dashboard'))->with([
                     'flash-message'   => "Task created successfully!",
                     'flash-type'      => 'success',
                     'flash-dismiss'   => true,
@@ -97,7 +97,7 @@ class TaskController extends Controller
         }
 
         // For GET requests, return the create-task view along with categories.
-        return view('backend.create-task', compact('categories'));
+        return view('create-task', compact('categories'));
     }
 
     /**
@@ -111,7 +111,6 @@ class TaskController extends Controller
     {
         // Retrieve all categories for the form
         $categories = TaskCategory::all();
-
         // Process POST requests (AJAX or regular form submission)
         if ($request->isMethod('post')) {
             // Validate the incoming request.
@@ -176,7 +175,7 @@ class TaskController extends Controller
             ]);
         }
 
-        return view('backend.edit-task', compact('categories', 'task'));
+        return view('edit-task', compact('categories', 'task'));
     }
 
     /**
