@@ -258,3 +258,15 @@ if (!function_exists('get_menu')) {
         return \App\Libraries\Menu::getMenu($location, $id);
     }
 }
+
+if (! function_exists('render_meta_tags')) {
+    /**
+     * Render the meta tags to HTML.
+     *
+     * @return string
+     */
+    function render_meta_tags(): string
+    {
+        return \App\Libraries\MetaTags::getInstance()->renderMetaTags();
+    }
+}

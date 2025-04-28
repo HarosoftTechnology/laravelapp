@@ -12,6 +12,21 @@ class Controller extends BaseController
 {
     use AuthorizesRequests, ValidatesRequests;
     protected $session;
+    public $noMenu = false;
+    public $noBanner = false;
+    public string $title = "";
+    public string $pageTitle = "";
+    public $keywords = "";
+    public $description = "";
+    /**
+     * Default meta tags. Controllers can override any of these.
+     */
+    
+    // protected $metaTags = [
+    //     'title'       => '', // If empty, it will default to config('site-title')
+    //     'description' => 'This is the default description for the website.',
+    //     'keywords'    => 'default, laravel, meta tags'
+    // ];
 
     public function __construct(Store $session)
     {
@@ -38,5 +53,15 @@ class Controller extends BaseController
     {
         $segment = request()->segment(1);
         return ($segment === 'admincp') ? 'backend' : 'frontend';
+    }
+
+    public function removeMenu($value = false) {
+        $this->noMenu = $value;
+        return $this;
+    }
+
+    public function removeBanner($value = false) {
+        $this->noBanner = $value;
+        return $this;
     }
 }

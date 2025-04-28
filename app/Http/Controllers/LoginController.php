@@ -5,11 +5,17 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+use App\Libraries\MetaTags;
 
 class LoginController extends Controller
 {
     public function index(Request $request)
     {
+        MetaTags::getInstance()
+            ->set('title', 'Welcome to My Laravel App')
+            ->set('description', 'This is the homepage of my awesome Laravel application.')
+            ->set('keywords', 'laravel, homepage, awesome');
+
         // If the user is already authenticated, redirect them to the dashboard
         if (Auth::check()) {
             return redirect()->route('admin-dashboard');
@@ -83,7 +89,12 @@ class LoginController extends Controller
             ]);
         }
 
-        return view('auth.login');
+        return view('auth.login', [
+            'title'       => $this->title,
+            'keywords'    => $this->keywords,
+            'description' => $this->description,
+            'noBanner'    => $this->noBanner, 
+        ]);
     }
 }
 
