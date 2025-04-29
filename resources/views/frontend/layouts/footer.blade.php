@@ -1,5 +1,7 @@
 <script type="text/javascript">
     let baseUrl = "{{ url('/') }}";
+    let requestToken = "{{ csrf_token() }}";
+    let csrf_token = "{{ csrf_token() }}";
 </script>
 
 <script src="{{ asset('js/jquery.js') }}"></script>
