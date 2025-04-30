@@ -49,18 +49,20 @@ class SignupController extends Controller
             if($created) {
                 // Automatically log in the newly registered user
                 Auth::login($user);
+                $redirect = ($user->hasRole('admin')) ? route('admin-dashboard') : route('home');
+
                 if ($request->ajax()) {
                     return response()->json([
                         'type'   => 'success',
                         'message'  => 'Registration successful!',
-                        'redirect' => route('admin-dashboard'),
+                        'redirect' => $redirect,
                     ]);
                 }
-                return redirect()->to(url_to_pager('admin-dashboard'))->with([
+                return redirect()->to($redirect)->with([
                     'flash-message'   => "Registration successful!",
                     'flash-type'      => 'success',
                     'flash-dismiss'   => true,
-                    'flash-position'  => 'bottom-right',
+                    'flash-position'  => 'bottom-left',
                 ]);
             }
             if ($request->ajax()) {

@@ -48,22 +48,29 @@ class LoginController extends Controller
             if (Auth::attempt($request->only('email', 'password'))) {
                 // Regenerate session to prevent fixation
                 $request->session()->regenerate();
-
-                // Check if the user's resume column has a URL from a previous session timeout
+            
                 $user = Auth::user();
+                
                 if (!empty($user->resume)) {
-                    session_put('resume', $user->resume);
-                    $redirect = session_get('resume');
+                    // If resume is not empty, use its value for redirection.
+                    session()->put('resume', $user->resume);
+                    $redirect = session()->get('resume');
+                    
                     // Clear the resume column so it doesn't affect subsequent logins
                     $user->resume = "";
                     $user->save();
                 } else {
-                    $redirect = url_to_pager('admin-dashboard');
+                    // If resume is empty, check if the user has the admin role.
+                    if ($user->hasRole('admin')) {
+                        $redirect = route('admin-dashboard');
+                    } else {
+                        $redirect = route('home');
+                    }
                 }
-
+            
                 if ($request->ajax()) {
                     return response()->json([
-                        'type'   => 'success',
+                        'type'     => 'success',
                         'message'  => 'Login successful!',
                         'redirect' => $redirect,
                     ]);
@@ -72,7 +79,7 @@ class LoginController extends Controller
                     'flash-message'   => "Login successful!",
                     'flash-type'      => 'success',
                     'flash-dismiss'   => true,
-                    'flash-position'  => 'bottom-right',
+                    'flash-position'  => 'bottom-left',
                 ]);
             }
             if ($request->ajax()) {
