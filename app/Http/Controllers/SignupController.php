@@ -30,7 +30,7 @@ class SignupController extends Controller
                         'errors' => $validator->errors(),
                     ], 422);
                 }
-                return redirect()->back()->with([
+                return redirect()->back()->withInput()->with([
                     'flash-message'   => implode('<br>', $validator->errors()->all()),
                     'flash-type'      => 'error',
                     'flash-dismiss'   => false,
@@ -69,7 +69,7 @@ class SignupController extends Controller
                     'message'  => 'Could not signup! Please contact the administrator.',
                 ]);
             }
-            return redirect()->back()->with([
+            return redirect()->back()->withInput()->with([
                 'flash-message'   => "Could not signup! Please contact the administrator.",
                 'flash-type'      => 'error',
                 'flash-dismiss'   => true,

@@ -36,7 +36,7 @@ class LoginController extends Controller
                         'errors' => $validator->errors(),
                     ], 422);
                 }
-                return redirect()->back()->with([
+                return redirect()->back()->withInput()->with([
                     'flash-message'   => implode('<br>', $validator->errors()->all()),
                     'flash-type'      => 'error',
                     'flash-dismiss'   => false,
@@ -81,7 +81,7 @@ class LoginController extends Controller
                     'message'  => 'Invalid username or password!',
                 ]);
             }
-            return redirect()->back()->with([
+            return redirect()->back()->withInput()->with([
                 'flash-message'   => "Invalid username or password!",
                 'flash-type'      => 'error',
                 'flash-dismiss'   => false,

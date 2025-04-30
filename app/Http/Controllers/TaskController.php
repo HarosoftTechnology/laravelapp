@@ -48,7 +48,7 @@ class TaskController extends Controller
                         'errors' => $validator->errors(),
                     ], 422);
                 }
-                return redirect()->back()->with([
+                return redirect()->back()->withInput()->with([
                     'flash-message'   => implode('<br>', $validator->errors()->all()),
                     'flash-type'      => 'error',
                     'flash-dismiss'   => false,
@@ -88,7 +88,7 @@ class TaskController extends Controller
                     'message' => 'Could not create task! Please contact the administrator.'
                 ]);
             }
-            return redirect()->back()->with([
+            return redirect()->back()->withInput()->with([
                 'flash-message'   => "Could not create task! Please contact the administrator.",
                 'flash-type'      => 'error',
                 'flash-dismiss'   => true,
@@ -128,7 +128,7 @@ class TaskController extends Controller
                         'errors' => $validator->errors(),
                     ], 422);
                 }
-                return redirect()->back()->with([
+                return redirect()->back()->withInput()->with([
                     'flash-message'   => implode('<br>', $validator->errors()->all()),
                     'flash-type'      => 'error',
                     'flash-dismiss'   => false,
@@ -167,7 +167,7 @@ class TaskController extends Controller
                     'message' => 'Could not update task! Please contact the administrator.',
                 ]);
             }
-            return redirect()->back()->with([
+            return redirect()->back()->withInput()->with([
                 'flash-message'   => "Could not update task! Please contact the administrator.",
                 'flash-type'      => 'error',
                 'flash-dismiss'   => true,
